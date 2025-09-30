@@ -1,0 +1,24 @@
+#the_table>tr>td {
+	padding: 20px;
+	background-color: green;
+}
+
+#the_table>tr>td.w {
+	background-color: grey;
+}
+
+#the_table>tr>td.s {
+	background-color: black;
+}
+
+#the_table>tr>td.e {
+	background-color: red;
+}
+
+#the_table>tr>td.m {
+	background-color: blue;
+}
+
+#the_table>tr>td.n {
+	background-color: yellow;
+}

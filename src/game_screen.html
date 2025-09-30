@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Rogue-like mech game - game screen</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+	<h1>Game screen</h1>
+	<a href="./index.html">index</a>
+
+	<table id="the_table"></table>
+
+	<!-- get all the maps, imported as JS scripts because that works reliably, and the maps can be made to have that format -->
+	<script src="./maps/test_map.js"></script>
+
+	<!-- The actual script stuff -->
+	<script>
+
+		var the_table = document.getElementById("the_table");
+
+		// ---------- Setup functions ----------
+
+		//function executed on loading the page to set up everything
+		function onload() {
+			let url = window.location.href;
+			let params_string = url.split("?")[1];
+			let params_array = params_string.split("&");
+
+			let param_pieces = [];
+			for (let param of params_array) {
+				//here I can look at each get parameter and set up the game accordingly
+				param_pieces = param.split("=");
+
+				if (param_pieces[0] == "map") {
+					//get the correct file and draw the map
+					switch (param_pieces[1]) {
+						case "test_map":
+							build_map(test_map);
+							break;
+						default:
+							alert("Could not find requested map");
+							break;
+					}
+				}
+			}
+
+			register_event_listeners();
+		}
+
+		//build the map at the start of the game
+		function build_map(map_data) {
+			let row;
+			let cell;
+			let rowindex = 0;
+			let colindex = 0;
+
+			for (let row_data of map_data) {
+				row = document.createElement("tr");
+				row.setAttribute("row", rowindex);
+				colindex = 0;
+				for (let col_data of row_data) {
+					cell = document.createElement("td");
+					cell.classList.add(col_data);
+					cell.setAttribute("row", rowindex);
+					cell.setAttribute("column", colindex);
+					if (col_data == "m" || col_data == "n") {
+						cell.setAttribute("id", col_data);
+					}
+					colindex++;
+					row.appendChild(cell);
+				}
+				rowindex++;
+				table_target().appendChild(row);
+			}
+		}
+
+		//registers the event listeners for key presses to control the mech //TODO: handlers for shooting missing
+		function register_event_listeners() {
+			addEventListener("keydown", (e) => {
+				switch (e.code) {
+					case "KeyW":
+						move_up("m");
+						break;
+					case "KeyA":
+						move_left("m");
+						break;
+					case "KeyS":
+						move_down("m");
+						break;
+					case "KeyD":
+						move_right("m");
+						break;
+					case "ArrowUp":
+						move_up("n");
+						break;
+					case "ArrowLeft":
+						move_left("n");
+						break;
+					case "ArrowDown":
+						move_down("n");
+						break;
+					case "ArrowRight":
+						move_right("n");
+						break;
+				}
+			});
+		}
+
+		// ---------- Other functions ----------
+
+		//moves a mech up if the path is clear
+		function move_up(mech) {
+			let mech_cell = document.getElementById(mech);
+			let table = table_target();
+			if ((+mech_cell.getAttribute("row")) - 1 < 0) {//check for out-of-bounds
+				return;
+			}
+			if (table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].classList.contains(0)) {
+				mech_cell.classList.add(0);
+				mech_cell.removeAttribute("id");
+				mech_cell.classList.remove(mech);
+
+				table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].classList.remove(0);
+				table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].setAttribute("id", mech);
+				table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].classList.add(mech);
+			}
+		}
+
+		//moves a mech left if the path is clear
+		function move_left(mech) {
+			let mech_cell = document.getElementById(mech);
+			let table = table_target();
+			if ((+mech_cell.getAttribute("column")) - 1 < 0) {//check for out-of-bounds
+				return;
+			}
+			if (table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].classList.contains(0)) {
+				mech_cell.classList.add(0);
+				mech_cell.removeAttribute("id");
+				mech_cell.classList.remove(mech);
+
+				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].classList.remove(0);
+				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].setAttribute("id", mech);
+				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].classList.add(mech);
+			}
+		}
+
+		//moves a mech down if the path is clear
+		function move_down(mech) {
+			let mech_cell = document.getElementById(mech);
+			let table = table_target();
+			if ((+mech_cell.getAttribute("row")) + 1 > table.children.length - 1) {//check for out-of-bounds
+				return;
+			}
+			if (table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].classList.contains(0)) {
+				mech_cell.classList.add(0);
+				mech_cell.removeAttribute("id");
+				mech_cell.classList.remove(mech);
+
+				table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].classList.remove(0);
+				table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].setAttribute("id", mech);
+				table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].classList.add(mech);
+			}
+		}
+
+		//moves a mech right if the path is clear
+		function move_right(mech) {
+			let mech_cell = document.getElementById(mech);
+			let table = table_target();
+			if ((+mech_cell.getAttribute("column")) + 1 > table.children[0].children.length - 1) {//check for out-of-bounds
+				return;
+			}
+			if (table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].classList.contains(0)) {
+				mech_cell.classList.add(0);
+				mech_cell.removeAttribute("id");
+				mech_cell.classList.remove(mech);
+
+				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].classList.remove(0);
+				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].setAttribute("id", mech);
+				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].classList.add(mech);
+			}
+		}
+
+		//returns the parent element of the table rows, either the table, or the auto-generated tbody element
+		//I've had problems with that browser auto-generated element before, I know I have to watch for that.
+		function table_target() {
+			if (the_table.children.length > 0 && the_table.children[0].tagName == "TBODY") {
+				return the_table.children[0];
+			} else {
+				return the_table;
+			}
+		}
+
+		onload();
+
+	</script>
+
+</body>
+
+</html>
