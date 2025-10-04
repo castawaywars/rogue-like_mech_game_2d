@@ -15,6 +15,7 @@
 
 	<!-- get all the maps, imported as JS scripts because that works reliably, and the maps can be made to have that format -->
 	<script src="./maps/test_map.js"></script>
+	<script src="./maps/test_map2.js"></script>
 
 	<!-- import the other scripts -->
 	<script src="./scripts/player_triggered_functions.js"></script>
@@ -43,6 +44,9 @@
 					switch (param_pieces[1]) {
 						case "test_map":
 							build_map(test_map);
+							break;
+						case "test_map2":
+							build_map(test_map2);
 							break;
 						default:
 							alert("Could not find requested map");
