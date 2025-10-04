@@ -21,7 +21,7 @@
 	<script src="./scripts/player_triggered_functions.js"></script>
 	<script src="./scripts/time_triggered_functions.js"></script>
 
-	<!-- The actual script stuff -->
+	<!-- Scripts that are not put into other files -->
 	<script>
 
 		var the_table = document.getElementById("the_table");
@@ -64,6 +64,8 @@
 			}
 
 			register_event_listeners();
+
+			time_loop();
 		}
 
 		//build the map at the start of the game
@@ -121,14 +123,24 @@
 					case "ArrowRight":
 						move_right("n");
 						break;
+					case "Space":
+						spawn_enemy();//TODO: this is only for debug, remove later
+						break;
 				}
 			});
 		}
 
+		//TODO: time loop that calls itself to advance the NPCs
+		function time_loop() {
+			//TODO: call various time-triggered functions
+		}
+
 		// ---------- Util functions ----------
 
-		//returns the parent element of the table rows, either the table, or the auto-generated tbody element
-		//I've had problems with that browser auto-generated element before, I know I have to watch for that.
+		/**
+		 * returns the parent element of the table rows, either the table, or the auto-generated tbody element
+		 * I've had problems with that browser auto-generated element before, I know I have to watch for that.
+		 */
 		function table_target() {
 			if (the_table.children.length > 0 && the_table.children[0].tagName == "TBODY") {
 				return the_table.children[0];
@@ -141,6 +153,23 @@
 		function tile_set_classes_to_zero(tile) {
 			tile.classList = "";
 			tile.classList.add(0);
+		}
+
+		/**
+		 * Utility function to check if a tile is on the map
+		 * @param {number} target_row 
+		 * @param {number} target_col 
+		 * @returns true if location in bounds, false if out of bounds
+		 */
+		function in_bounds(target_row, target_column) {
+			if (target_row < 0 || target_col < 0) {
+				return false; //index less than 0, clearly out of bounds
+			}
+			let the_table = table_target();
+			if (the_table.children.length <= target_row || the_table.children[0].children.length <= target_col) {
+				return false; //also out of bounds
+			}
+			return true;
 		}
 
 		onload();

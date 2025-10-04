@@ -82,4 +82,6 @@ function try_place_enemy(target_row, target_col) {
 /**
  * TODO: moves an enemy in a random direction
  */
-function random_enemy_move() { }
+function random_enemy_move() {
+	//TODO: if the enemy crashes into a mech, deal damage to the mech
+}
