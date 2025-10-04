@@ -27,6 +27,10 @@
 	<script>
 
 		var the_table = document.getElementById("the_table");
+		var move_delay = 2;
+		var spawn_delay = 5;
+		var time_since_move = 0;
+		var time_since_spawn = 0;
 
 		// ---------- Setup functions ----------
 
@@ -68,6 +72,10 @@
 						n.classList.remove("n");
 						n.classList.add("0");
 					}
+				} else if (param_pieces[0] == "move_delay") {
+					move_delay = param_pieces[1];
+				} else if (param_pieces[0] == "spawn_delay") {
+					spawn_delay = param_pieces[1];
 				}
 			}
 
@@ -103,7 +111,7 @@
 			}
 		}
 
-		//registers the event listeners for key presses to control the mech //TODO: handlers for shooting missing
+		//registers the event listeners for key presses to control the mech
 		function register_event_listeners() {
 			addEventListener("keydown", (e) => {
 				switch (e.code) {
@@ -137,16 +145,28 @@
 					case "Slash"://that's actually "-" on my keyboard
 						shoot("n");
 						break;
-					case "Space":
-						spawn_enemy();//TODO: this is only for debug, remove later
-						break;
 				}
 			});
 		}
 
-		//TODO: time loop that calls itself to advance the NPCs
 		function time_loop() {
-			//TODO: call various time-triggered functions
+			time_since_move++;
+			time_since_spawn++;
+			if (time_since_move >= move_delay) {
+				//move all enemies
+				let enemies = document.getElementsByClassName("e");
+				for (let enemy of enemies) {
+					random_enemy_move(enemy);
+				}
+				time_since_move = 0;
+			}
+
+			if (time_since_spawn >= spawn_delay) {
+				spawn_enemy();
+				time_since_spawn = 0;
+			}
+
+			setTimeout(time_loop, 1000);
 		}
 
 		// ---------- Util functions ----------

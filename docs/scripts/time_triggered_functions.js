@@ -6,6 +6,10 @@
 function spawn_enemy() {
 	let spawners = document.getElementsByClassName("s");
 
+	if (spawners.length == 0) {
+		return; //there are no spawners on this map
+	}
+
 	//pick a random spawner to spawn a new enemy at
 	let target_spawner = spawners[Math.floor(Math.random() * spawners.length)];
 	let spawner_row = target_spawner.getAttribute("row");
@@ -80,8 +84,49 @@ function try_place_enemy(target_row, target_col) {
 }
 
 /**
- * TODO: moves an enemy in a random direction
+ * moves an enemy in a random direction
+ * if the enemy crashes into a mech, destroy to the mech and promote the enemy to a spawner
  */
-function random_enemy_move() {
-	//TODO: if the enemy crashes into a mech, deal damage to the mech
+function random_enemy_move(enemy_tile) {
+	let current_row = enemy_tile.getAttribute("row");
+	let current_col = enemy_tile.getAttribute("column");
+	let target_row = current_row;
+	let target_col = current_col;
+
+	//pick a direction
+	let aim = Math.floor(Math.random() * 4);
+	switch (aim) {
+		case 0:
+			target_row--;
+			break;
+		case 1:
+			target_col--;
+			break;
+		case 2:
+			target_row++;
+			break;
+		case 3:
+			target_col++;
+			break;
+	}
+
+	if (!in_bounds(target_row, target_col)) {
+		return;//if trying to move out of bounds, abort
+	}
+
+	let the_table = table_target();
+	let target_tile = the_table.children[target_row].children[target_col];
+	if (target_tile.classList.contains(0)) {
+		//empty tile targeted. Move.
+		tile_set_classes_to_zero(enemy_tile);
+		target_tile.classList.remove("0");
+		target_tile.classList.add("e");
+	} else if (target_tile.classList.contains("n") || target_tile.classList.contains("m")) {
+		//enemy detected. Kill him and promote into a spawner
+		tile_set_classes_to_zero(enemy_tile);
+		tile_set_classes_to_zero(target_tile);
+		target_tile.removeAttribute("id");
+		target_tile.classList.remove("0");
+		target_tile.classList.add("s");
+	}
 }
