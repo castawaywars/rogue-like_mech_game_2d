@@ -77,13 +77,13 @@ function move_mech(mech_cell, mech, target_cell, direction) {
 function shoot(mech) {
 	let mech_tile = document.getElementById(mech);
 	if (mech_tile.classList.contains("up")) {
-		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "up");
+		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "up", mech);
 	} else if (mech_tile.classList.contains("left")) {
-		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "left");
+		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "left", mech);
 	} else if (mech_tile.classList.contains("down")) {
-		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "down");
+		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "down", mech);
 	} else if (mech_tile.classList.contains("right")) {
-		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "right");
+		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "right", mech);
 	}
 }
 
@@ -93,7 +93,7 @@ function shoot(mech) {
  * @param {number} from_column 
  * @param {string} direction 
  */
-function shot_flies(from_row, from_column, direction) {
+function shot_flies(from_row, from_column, direction, mech) {
 	let target_row = from_row;
 	let target_column = from_column;
 	switch (direction) {
@@ -110,24 +110,25 @@ function shot_flies(from_row, from_column, direction) {
 			target_column = (+from_column) + 1;
 			break;
 	}
-	shot_hit_scan(target_row, target_column, direction);
+	shot_hit_scan(target_row, target_column, direction, mech);
 }
 
 /**
  * checks if a shot hit something, if not keep flying, if yes remove enemy if needed
  * @returns nothing
  */
-function shot_hit_scan(target_row, target_column, direction) {
+function shot_hit_scan(target_row, target_column, direction, mech) {
 	if (in_bounds(target_row, target_column)) {
 		let the_table = table_target();
 		let target = the_table.children[target_row].children[target_column];
 		if (target.classList.contains("0")) {
 			//nothing hit yet, continue flying
-			shot_flies(target_row, target_column, direction);
+			shot_flies(target_row, target_column, direction, mech);
 		} else if (target.classList.contains("m") || target.classList.contains("n") || target.classList.contains("s") || target.classList.contains("w")) {
 			return; //hit an ally, spawner, or wall, stop flying
 		} else if (target.classList.contains("e")) {
 			tile_set_classes_to_zero(target);
+			document.getElementById(mech + "_score").innerHTML++;
 			return; //hit an enemy, stop flying
 		}
 	} else {

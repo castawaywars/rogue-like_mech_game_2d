@@ -11,7 +11,43 @@
 	<h1>Game screen</h1>
 	<a href="./index.html">index</a>
 
+	<table>
+		<tr>
+			<td>Kills<br><span id="m_score">0</span></td>
+			<td onclick="move_up('m')">W</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td onclick="move_left('m')">A</td>
+			<td class="m" onclick="shoot('m')">Shoot:<br>Q</td>
+			<td onclick="move_right('m')">D</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td onclick="move_down('m')">S</td>
+			<td></td>
+		</tr>
+	</table>
+
 	<table id="the_table"></table>
+
+	<table>
+		<tr>
+			<td>Kills<br><span id="n_score">0</span></td>
+			<td onclick="move_up('n')">&uarr;</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td onclick="move_left('n')">&larr;</td>
+			<td class="n" onclick="shoot('n')">Shoot:<br>-</td>
+			<td onclick="move_right('n')">&rarr;</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td onclick="move_down('n')">&darr;</td>
+			<td></td>
+		</tr>
+	</table>
 
 	<!-- get all the maps, imported as JS scripts because that works reliably, and the maps can be made to have that format -->
 	<script src="./maps/deadly_horde.js"></script>

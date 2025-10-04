@@ -1,44 +1,44 @@
-#the_table>tr>td {
+td {
 	padding: 20px;
 	background-color: green;
 }
 
-#the_table>tr>td.w {
+.w {
 	background-color: grey;
 }
 
-#the_table>tr>td.s {
+.s {
 	background-color: black;
 }
 
-#the_table>tr>td.e {
+.e {
 	background-color: red;
 }
 
-#the_table>tr>td.m {
+.m {
 	background-color: blue;
 }
 
-#the_table>tr>td.n {
+.n {
 	background-color: yellow;
 }
 
 .up {
 	border-top: 5px solid black;
-	padding-top: 15px !important;
+	padding-top: 15px;
 }
 
 .left {
 	border-left: 5px solid black;
-	padding-left: 15px !important;
+	padding-left: 15px;
 }
 
 .down {
 	border-bottom: 5px solid black;
-	padding-bottom: 15px !important;
+	padding-bottom: 15px;
 }
 
 .right {
 	border-right: 5px solid black;
-	padding-right: 15px !important;
+	padding-right: 15px;
 }
