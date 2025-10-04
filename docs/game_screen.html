@@ -16,6 +16,10 @@
 	<!-- get all the maps, imported as JS scripts because that works reliably, and the maps can be made to have that format -->
 	<script src="./maps/test_map.js"></script>
 
+	<!-- import the other scripts -->
+	<script src="./scripts/player_triggered_functions.js"></script>
+	<script src="./scripts/time_triggered_functions.js"></script>
+
 	<!-- The actual script stuff -->
 	<script>
 
@@ -43,6 +47,14 @@
 						default:
 							alert("Could not find requested map");
 							break;
+					}
+				} else if (param_pieces[0] == "two_player") {
+					//remove player 2 if it's single-player
+					if (param_pieces[1] == "no") {
+						let n = document.getElementById("n");
+						n.removeAttribute("id");
+						n.classList.remove("n");
+						n.classList.add("0");
 					}
 				}
 			}
@@ -109,79 +121,7 @@
 			});
 		}
 
-		// ---------- Other functions ----------
-
-		//moves a mech up if the path is clear
-		function move_up(mech) {
-			let mech_cell = document.getElementById(mech);
-			let table = table_target();
-			if ((+mech_cell.getAttribute("row")) - 1 < 0) {//check for out-of-bounds
-				return;
-			}
-			if (table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].classList.contains(0)) {
-				mech_cell.classList.add(0);
-				mech_cell.removeAttribute("id");
-				mech_cell.classList.remove(mech);
-
-				table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].classList.remove(0);
-				table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].setAttribute("id", mech);
-				table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))].classList.add(mech);
-			}
-		}
-
-		//moves a mech left if the path is clear
-		function move_left(mech) {
-			let mech_cell = document.getElementById(mech);
-			let table = table_target();
-			if ((+mech_cell.getAttribute("column")) - 1 < 0) {//check for out-of-bounds
-				return;
-			}
-			if (table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].classList.contains(0)) {
-				mech_cell.classList.add(0);
-				mech_cell.removeAttribute("id");
-				mech_cell.classList.remove(mech);
-
-				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].classList.remove(0);
-				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].setAttribute("id", mech);
-				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1].classList.add(mech);
-			}
-		}
-
-		//moves a mech down if the path is clear
-		function move_down(mech) {
-			let mech_cell = document.getElementById(mech);
-			let table = table_target();
-			if ((+mech_cell.getAttribute("row")) + 1 > table.children.length - 1) {//check for out-of-bounds
-				return;
-			}
-			if (table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].classList.contains(0)) {
-				mech_cell.classList.add(0);
-				mech_cell.removeAttribute("id");
-				mech_cell.classList.remove(mech);
-
-				table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].classList.remove(0);
-				table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].setAttribute("id", mech);
-				table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))].classList.add(mech);
-			}
-		}
-
-		//moves a mech right if the path is clear
-		function move_right(mech) {
-			let mech_cell = document.getElementById(mech);
-			let table = table_target();
-			if ((+mech_cell.getAttribute("column")) + 1 > table.children[0].children.length - 1) {//check for out-of-bounds
-				return;
-			}
-			if (table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].classList.contains(0)) {
-				mech_cell.classList.add(0);
-				mech_cell.removeAttribute("id");
-				mech_cell.classList.remove(mech);
-
-				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].classList.remove(0);
-				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].setAttribute("id", mech);
-				table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1].classList.add(mech);
-			}
-		}
+		// ---------- Util functions ----------
 
 		//returns the parent element of the table rows, either the table, or the auto-generated tbody element
 		//I've had problems with that browser auto-generated element before, I know I have to watch for that.
@@ -191,6 +131,12 @@
 			} else {
 				return the_table;
 			}
+		}
+
+		//removes all classes from the class list of a tile and adds the 0 class, making it an empty space
+		function tile_set_classes_to_zero(tile) {
+			tile.classList = "";
+			tile.classList.add(0);
 		}
 
 		onload();

@@ -22,3 +22,23 @@
 #the_table>tr>td.n {
 	background-color: yellow;
 }
+
+.up {
+	border-top: 5px solid black;
+	padding-top: 15px !important;
+}
+
+.left {
+	border-left: 5px solid black;
+	padding-left: 15px !important;
+}
+
+.down {
+	border-bottom: 5px solid black;
+	padding-bottom: 15px !important;
+}
+
+.right {
+	border-right: 5px solid black;
+	padding-right: 15px !important;
+}
