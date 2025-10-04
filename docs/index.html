@@ -11,9 +11,21 @@
 	<h1>Index</h1>
 
 
-	<a href="game_screen.html?map=test_map">To game screen with test map</a>
 
-
+	<form action="./game_screen.html" method="GET">
+		<label>
+			To a game on the map
+			<select name="map">
+				<option value="test_map">test map</option>
+			</select>
+		</label>
+		<br>
+		Two players:
+		<label>yes:<input type="radio" name="two_player" value="yes" checked></label>
+		<label>no:<input type="radio" name="two_player" value="no"></label>
+		<br>
+		<input type="submit">
+	</form>
 </body>
 
 </html>
