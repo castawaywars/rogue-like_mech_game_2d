@@ -5,6 +5,9 @@
  */
 function move_up(mech) {
 	let mech_cell = document.getElementById(mech);
+	mech_cell.classList = "";
+	mech_cell.classList.add(mech);
+	mech_cell.classList.add("up");
 	let table = table_target();
 	if ((+mech_cell.getAttribute("row")) - 1 >= 0) {//check for out-of-bounds
 		let target_cell = table.children[(+mech_cell.getAttribute("row")) - 1].children[(+mech_cell.getAttribute("column"))];
@@ -18,6 +21,9 @@ function move_up(mech) {
  */
 function move_left(mech) {
 	let mech_cell = document.getElementById(mech);
+	mech_cell.classList = "";
+	mech_cell.classList.add(mech);
+	mech_cell.classList.add("left");
 	let table = table_target();
 	if ((+mech_cell.getAttribute("column")) - 1 >= 0) {//check for out-of-bounds
 		let target_cell = table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) - 1];
@@ -31,6 +37,9 @@ function move_left(mech) {
  */
 function move_down(mech) {
 	let mech_cell = document.getElementById(mech);
+	mech_cell.classList = "";
+	mech_cell.classList.add(mech);
+	mech_cell.classList.add("down");
 	let table = table_target();
 	if ((+mech_cell.getAttribute("row")) + 1 <= table.children.length - 1) {//check for out-of-bounds
 		let target_cell = table.children[(+mech_cell.getAttribute("row")) + 1].children[(+mech_cell.getAttribute("column"))];
@@ -44,6 +53,9 @@ function move_down(mech) {
  */
 function move_right(mech) {
 	let mech_cell = document.getElementById(mech);
+	mech_cell.classList = "";
+	mech_cell.classList.add(mech);
+	mech_cell.classList.add("right");
 	let table = table_target();
 	if ((+mech_cell.getAttribute("column")) + 1 <= table.children[0].children.length - 1) {//check for out-of-bounds
 		let target_cell = table.children[(+mech_cell.getAttribute("row"))].children[(+mech_cell.getAttribute("column")) + 1];
