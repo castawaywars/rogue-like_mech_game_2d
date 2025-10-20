@@ -122,11 +122,26 @@ function random_enemy_move(enemy_tile) {
 		target_tile.classList.remove("0");
 		target_tile.classList.add("e");
 	} else if (target_tile.classList.contains("n") || target_tile.classList.contains("m")) {
-		//enemy detected. Kill him and promote into a spawner
-		tile_set_classes_to_zero(enemy_tile);
-		tile_set_classes_to_zero(target_tile);
-		target_tile.removeAttribute("id");
-		target_tile.classList.remove("0");
-		target_tile.classList.add("s");
+		tile_set_classes_to_zero(enemy_tile); //enemy disappears regardless of result
+
+		//enemy detected.
+		let mech = "";
+		if (target_tile.classList.contains("m")) {
+			mech = "m";
+		} else if (target_tile.classList.contains("n")) {
+			mech = "n";
+		}
+
+		//reduce mech health
+		let mech_health_span = document.getElementById(mech + "_health");
+		mech_health_span.innerHTML--;
+
+		//If mech health =0, kill him and promote enemy into a spawner
+		if (mech_health_span.innerHTML == 0) {
+			tile_set_classes_to_zero(target_tile);
+			target_tile.removeAttribute("id");
+			target_tile.classList.remove("0");
+			target_tile.classList.add("s");
+		}
 	}
 }

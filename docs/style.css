@@ -23,6 +23,10 @@ td {
 	background-color: yellow;
 }
 
+.h {
+	background-color: white;
+}
+
 .up {
 	border-top: 5px solid black;
 	padding-top: 15px;

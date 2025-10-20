@@ -71,7 +71,12 @@ function move_right(mech) {
  * @param {String} direction 
  */
 function move_mech(mech_cell, mech, target_cell, direction) {
-	if (target_cell.classList.contains(0)) {
+	if (target_cell.classList.contains(0) || target_cell.classList.contains("f") || target_cell.classList.contains("h")) {
+		if (target_cell.classList.contains("h")) {
+			increase_health(mech);
+			target_cell.classList.remove("h");
+		}
+
 		tile_set_classes_to_zero(mech_cell);
 		mech_cell.removeAttribute("id");
 
@@ -80,6 +85,14 @@ function move_mech(mech_cell, mech, target_cell, direction) {
 		target_cell.classList.add(mech);
 		target_cell.classList.add(direction);
 	}
+}
+
+/**
+ * increases the health of a mech
+ * @param {String} mech 
+ */
+function increase_health(mech) {
+	document.getElementById(mech + "_health").innerHTML++;
 }
 
 /**
