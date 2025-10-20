@@ -10,7 +10,23 @@
 <body>
 	<h1>Index</h1>
 
-
+	<p>Welcome to the rogue-like mech game!<br>
+		Feature cuts have resulted in the rogue-like elements getting removed (for now), but other than that, it's still
+		a mech game. <br>
+		You can control the mechs with wasd, q for shooting, e for reloading for player 1 and the arrow keys, - for
+		shooting, . for reloading for player two, or use the clickable tiles above and below the map, especially helpful
+		on touch screens.<br>
+		The walkable places are green, the mechs are <span class="m">blue (player 1)</span> and <span class="n">yellow
+			(player 2)</span>, <span class="e">enemies are red</span>, enemy spawners are black, <span class="w">simple
+			obstacles are grey</span>, health packs are white, and <span class="f">flamethrower ammo (not functional
+			yet) is orange.</span><br>
+		You can see what direction the mech is facing by the black bar. Shooting shoots forward in whatever direction
+		you are currently facing. Enemies die in one shot. If an enemy walks into you, he will damage you. If your
+		health drops to 0, you die and the enemy that killed you is promoted into a new spawner on the spot you died
+		on.<br>
+		If your gun is out of ammo, you can't shoot, you will have to reload. Don't spam the reload button though, as
+		reloading takes a second, and you can't shoot during the reloading.
+	</p>
 
 	<form action="./game_screen.html" method="GET">
 		<label>
@@ -19,7 +35,7 @@
 				<option value="deadly_horde">Deadly horde: a lot of enemies, no spawners</option>
 				<option value="fortress">Fortress: an easily defensible fortress</option>
 				<option value="test_map">test map</option>
-				<option value="test_map2">test map with more spawners</option>
+				<option value="test_map2">test map with more spawners and some pre-placed items</option>
 			</select>
 		</label>
 		<br>
