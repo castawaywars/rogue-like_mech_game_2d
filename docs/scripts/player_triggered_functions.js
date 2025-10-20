@@ -72,6 +72,10 @@ function move_right(mech) {
  */
 function move_mech(mech_cell, mech, target_cell, direction) {
 	if (target_cell.classList.contains(0) || target_cell.classList.contains("f") || target_cell.classList.contains("h")) {
+		if (target_cell.classList.contains("f")) {
+			increase_flamethrower_ammo(mech);
+			target_cell.classList.remove("f");
+		}
 		if (target_cell.classList.contains("h")) {
 			increase_health(mech);
 			target_cell.classList.remove("h");
@@ -88,6 +92,27 @@ function move_mech(mech_cell, mech, target_cell, direction) {
 }
 
 /**
+ * reloads the gun of a mech
+ * @param {String} mech 
+ */
+function reload_gun(mech) {
+	document.getElementById(mech + "_gun_ammo").innerHTML = 0;
+	setTimeout(() => {
+		document.getElementById(mech + "_gun_ammo").innerHTML = 10;
+	}, 1000)
+}
+
+/**
+ * increases the flamethrower ammo of a mech
+ * @param {String} mech 
+ */
+function increase_flamethrower_ammo(mech) {
+	document.getElementById(mech + "_flame_ammo").innerHTML++;
+	document.getElementById(mech + "_flame_ammo").innerHTML++;
+	document.getElementById(mech + "_flame_ammo").innerHTML++;
+}
+
+/**
  * increases the health of a mech
  * @param {String} mech 
  */
@@ -98,8 +123,17 @@ function increase_health(mech) {
 /**
  * shoot the weapons of a mech
  * @param {String} mech 
+ * 
+ * //TODO: handle shooting flamethrower
  */
 function shoot(mech) {
+	if (document.getElementById(mech + "_gun_ammo").innerHTML == 0) {
+		//no ammo, return
+		return;
+	} else {
+		document.getElementById(mech + "_gun_ammo").innerHTML--;
+	}
+
 	let mech_tile = document.getElementById(mech);
 	if (mech_tile.classList.contains("up")) {
 		shot_flies(mech_tile.getAttribute("row"), mech_tile.getAttribute("column"), "up", mech);
@@ -154,6 +188,16 @@ function shot_hit_scan(target_row, target_column, direction, mech) {
 		} else if (target.classList.contains("e")) {
 			tile_set_classes_to_zero(target);
 			document.getElementById(mech + "_score").innerHTML++;
+
+			if (Math.random() > 0.9) {//random chance for the enemy to drop health or flamethrower ammo
+				target.classList = "";
+				if (Math.random() < 0.75) {//did it drop health or flamethrower ammo, number indicates chance for flamethrower ammo, rest of chance is health
+					target.classList.add("f");
+				} else {
+					target.classList.add("h");
+				}
+			}
+
 			return; //hit an enemy, stop flying
 		}
 	} else {

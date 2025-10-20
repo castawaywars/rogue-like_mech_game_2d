@@ -23,9 +23,9 @@
 			<td onclick="move_right('m')">D</td>
 		</tr>
 		<tr>
-			<td></td>
+			<td onclick="reload_gun('m')">Gun ammo<br><span id="m_gun_ammo">0</span><br>reload E</td>
 			<td onclick="move_down('m')">S</td>
-			<td></td>
+			<td>Flame ammo<br><span id="m_flame_ammo">0</span></td>
 		</tr>
 	</table>
 
@@ -43,9 +43,9 @@
 			<td onclick="move_right('n')">&rarr;</td>
 		</tr>
 		<tr>
-			<td></td>
+			<td onclick="reload_gun('n')">Gun ammo<br><span id="n_gun_ammo">0</span><br>reload :</td>
 			<td onclick="move_down('n')">&darr;</td>
-			<td></td>
+			<td>Flame ammo<br><span id="n_flame_ammo">0</span><br></td>
 		</tr>
 	</table>
 
@@ -180,6 +180,12 @@
 						break;
 					case "Slash"://that's actually "-" on my keyboard
 						shoot("n");
+						break;
+					case "KeyE":
+						reload_gun("m");
+						break;
+					case "Period":
+						reload_gun("n");
 						break;
 				}
 			});
