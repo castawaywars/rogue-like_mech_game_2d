@@ -11,7 +11,8 @@ td {
 	background-color: black;
 }
 
-.e {
+.e,
+.enemy {
 	background-color: red;
 }
 
