@@ -3,11 +3,13 @@ td {
 	background-color: green;
 }
 
-.w {
+.w,
+.wall {
 	background-color: grey;
 }
 
-.s {
+.s,
+.spawner {
 	background-color: black;
 }
 
@@ -16,19 +18,23 @@ td {
 	background-color: red;
 }
 
-.m {
+.m,
+.player1 {
 	background-color: blue;
 }
 
-.n {
+.n,
+.player2 {
 	background-color: yellow;
 }
 
-.f {
+.f,
+.flamethrower_ammo {
 	background-color: orange;
 }
 
-.h {
+.h,
+.health {
 	background-color: white;
 }
 
@@ -50,4 +56,8 @@ td {
 .right {
 	border-right: 5px solid black;
 	padding-right: 15px;
+}
+
+.dark_mode {
+	color: white
 }

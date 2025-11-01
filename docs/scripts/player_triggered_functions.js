@@ -204,3 +204,79 @@ function shot_hit_scan(target_row, target_column, direction, mech) {
 		return; //hit the edge of the map, stop flying
 	}
 }
+
+/**
+ * shoot the flamethrower of a mech
+ * @param {String} mech 
+ */
+function flamethrower_shoot(mech) {
+	if (document.getElementById(mech + "_flame_ammo").innerHTML == 0) {
+		//no ammo, return
+		return;
+	} else {
+		document.getElementById(mech + "_flame_ammo").innerHTML--;
+	}
+
+	let mech_tile = document.getElementById(mech);
+	let mech_row = +mech_tile.getAttribute("row");
+	let mech_column = +mech_tile.getAttribute("column");
+	let coordinates = [];
+	if (mech_tile.classList.contains("up")) {
+		coordinates.push([mech_row - 1, mech_column]);
+		coordinates.push([mech_row - 1, mech_column - 1]);
+		coordinates.push([mech_row - 1, mech_column + 1]);
+		coordinates.push([mech_row - 2, mech_column]);
+	} else if (mech_tile.classList.contains("left")) {
+		coordinates.push([mech_row, mech_column - 1]);
+		coordinates.push([mech_row - 1, mech_column - 1]);
+		coordinates.push([mech_row + 1, mech_column - 1]);
+		coordinates.push([mech_row, mech_column - 2]);
+	} else if (mech_tile.classList.contains("down")) {
+		coordinates.push([mech_row + 1, mech_column]);
+		coordinates.push([mech_row + 1, mech_column - 1]);
+		coordinates.push([mech_row + 1, mech_column + 1]);
+		coordinates.push([mech_row + 2, mech_column]);
+	} else if (mech_tile.classList.contains("right")) {
+		coordinates.push([mech_row, mech_column + 1]);
+		coordinates.push([mech_row - 1, mech_column + 1]);
+		coordinates.push([mech_row + 1, mech_column + 1]);
+		coordinates.push([mech_row, mech_column + 2]);
+	}
+
+	for (let location of coordinates) {
+		if (in_bounds(location[0], location[1])) {
+			flame_hit_scan(location[0], location[1], mech);
+		}
+	}
+}
+
+/**
+ * check if a flamethower "projectile" hit anything, and handle accordingly
+ * @param {number} target_row 
+ * @param {number} target_column 
+ * @param {string} mech 
+ * @returns nothing
+ */
+function flame_hit_scan(target_row, target_column, mech) {
+	let the_table = table_target();
+	let target = the_table.children[target_row].children[target_column];
+	if (target.classList.contains("0")) {
+		return;//nothing hit, return
+	} else if (target.classList.contains("m") || target.classList.contains("n") || target.classList.contains("w")) {
+		return; //hit an ally or wall, ignore
+	} else if (target.classList.contains("e") || target.classList.contains("s")) {
+		//destroy enemies and spawners
+		tile_set_classes_to_zero(target);
+		document.getElementById(mech + "_score").innerHTML++;
+
+		if (Math.random() > 0.9) {//random chance for the enemy to drop health or flamethrower ammo
+			target.classList = "";
+			if (Math.random() < 0.75) {//did it drop health or flamethrower ammo, number indicates chance for flamethrower ammo, rest of chance is health
+				target.classList.add("f");
+			} else {
+				target.classList.add("h");
+			}
+		}
+		return;
+	}
+}
