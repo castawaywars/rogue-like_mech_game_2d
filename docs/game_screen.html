@@ -32,7 +32,7 @@
 			</tr>
 		</table>
 
-		<p>You can control the mechs with wasd, q for shooting, e for reloading for player 1 and the arrow keys, - for
+		<p>You can control the mechs with wasd, q for shooting, e for reloading for player 1 and ijkl, - for
 			shooting, . for reloading for player two, or use the clickable tiles above and below the map, especially
 			helpful on touch screens. Flamethrower player 1 is r, flamethrower player 2 is , . The flamethrower destroys
 			enemies and spawners in a sort of cone-shape in front of the mech, and the flamethrower is the only way to
@@ -57,17 +57,17 @@
 	<table>
 		<tr>
 			<td>Kills<br><span id="n_score">0</span></td>
-			<td onclick="move_up('n')">&uarr;</td>
+			<td onclick="move_up('n')">I</td>
 			<td>HP<br><span id="n_health">5</span></td>
 		</tr>
 		<tr>
-			<td onclick="move_left('n')">&larr;</td>
+			<td onclick="move_left('n')">J</td>
 			<td class="n" onclick="shoot('n')">Shoot:<br>-</td>
-			<td onclick="move_right('n')">&rarr;</td>
+			<td onclick="move_right('n')">L</td>
 		</tr>
 		<tr>
 			<td onclick="reload_gun('n')">Gun&nbsp;ammo<br><span id="n_gun_ammo">0</span><br>reload :</td>
-			<td onclick="move_down('n')">&darr;</td>
+			<td onclick="move_down('n')">K</td>
 			<td onclick="flamethrower_shoot('n')">Flame&nbsp;ammo<br><span id="n_flame_ammo">0</span><br>shoot ;</td>
 		</tr>
 	</table>
@@ -189,16 +189,16 @@
 					case "KeyQ":
 						shoot("m");
 						break;
-					case "ArrowUp":
+					case "KeyI":
 						move_up("n");
 						break;
-					case "ArrowLeft":
+					case "KeyJ":
 						move_left("n");
 						break;
-					case "ArrowDown":
+					case "KeyK":
 						move_down("n");
 						break;
-					case "ArrowRight":
+					case "KeyL":
 						move_right("n");
 						break;
 					case "Slash"://that's actually "-" on my keyboard
