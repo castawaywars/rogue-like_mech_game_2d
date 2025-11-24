@@ -90,6 +90,7 @@
 		var spawn_delay = 5;
 		var time_since_move = 0;
 		var time_since_spawn = 0;
+		var single_player = false;
 
 		// ---------- Setup functions ----------
 
@@ -130,6 +131,7 @@
 						n.removeAttribute("id");
 						n.classList.remove("n");
 						n.classList.add("0");
+						single_player = true;
 					}
 				} else if (param_pieces[0] == "move_delay") {
 					move_delay = param_pieces[1];

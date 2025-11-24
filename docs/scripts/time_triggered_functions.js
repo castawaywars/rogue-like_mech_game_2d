@@ -145,3 +145,159 @@ function random_enemy_move(enemy_tile) {
 		}
 	}
 }
+/**
+ * finds where the mechs can shoot
+ * @returns array of [x,y]-coordinates where mechs can shoot
+ */
+function find_line_of_fire_tiles() {
+	let returner = [];
+	let table = table_target();
+
+	let player = document.getElementById("m");
+	let player_x = +player.getAttribute("row");
+	let player_y = +player.getAttribute("column");
+	let dir_mod = [0, 0]; //direction modifier to make steps following the gun line of fire
+	let flame_available = document.getElementById("m_flame_ammo").innerHTML > 0;
+	let flame_targetable = [];
+	if (player.classList.contains("up")) {
+		dir_mod[0] = -1;
+		if (flame_available) {
+			//flamethrower ammo available, add flamethrower covered fields to danger zone
+			flame_targetable.push([+player_x - 1, +player_y]);
+			flame_targetable.push([+player_x - 1, +player_y - 1]);
+			flame_targetable.push([+player_x - 1, +player_y + 1]);
+			flame_targetable.push([+player_x - 2, +player_y]);
+		}
+	} else if (player.classList.contains("down")) {
+		dir_mod[0] = 1;
+		if (flame_available) {
+			//flamethrower ammo available, add flamethrower covered fields to danger zone
+			flame_targetable.push([+player_x + 1, +player_y]);
+			flame_targetable.push([+player_x + 1, +player_y - 1]);
+			flame_targetable.push([+player_x + 1, +player_y + 1]);
+			flame_targetable.push([+player_x + 2, +player_y]);
+		}
+	} else if (player.classList.contains("right")) {
+		dir_mod[1] = 1;
+		if (flame_available) {
+			//flamethrower ammo available, add flamethrower covered fields to danger zone
+			flame_targetable.push([+player_x, +player_y + 1]);
+			flame_targetable.push([+player_x - 1, +player_y + 1]);
+			flame_targetable.push([+player_x + 1, +player_y + 1]);
+			flame_targetable.push([+player_x, +player_y + 2]);
+		}
+	} else if (player.classList.contains("left")) {
+		dir_mod[1] = -1;
+		if (flame_available) {
+			//flamethrower ammo available, add flamethrower covered fields to danger zone
+			flame_targetable.push([+player_x, +player_y - 1]);
+			flame_targetable.push([+player_x - 1, +player_y - 1]);
+			flame_targetable.push([+player_x + 1, +player_y - 1]);
+			flame_targetable.push([+player_x, +player_y - 2]);
+		}
+	}
+
+	//if flamethrower ammo is available, add those of the flamethrower-covered fields that are actually places the enemy can go to the returner
+	if (flame_available) {
+		let targeted_cell;
+		for (let i = 0; i < 4; i++) {
+			if (in_bounds(flame_targetable[i][0], flame_targetable[i][1])) {
+				targeted_cell = table.children[flame_targetable[i][0]].children[flame_targetable[i][1]];
+				if (targeted_cell.classList.contains("0") || targeted_cell.classList.contains("e")) {
+					returner.push([flame_targetable[i][0], flame_targetable[i][1]]);
+				}
+			}
+		}
+	}
+
+	let step_coords = [+player_x + dir_mod[0], +player_y + dir_mod[1]];
+	while (in_bounds(step_coords[0], step_coords[1])) {
+		if (table.children[step_coords[0]].children[step_coords[1]].classList.contains["0"]) {
+			returner.push([step_coords[0], step_coords[1]]);
+
+			step_coords[0] = +step_coords[0] + dir_mod[0];
+			step_coords[1] = +step_coords[1] + dir_mod[1];
+		} else {
+			//encountered obstacle, line of fire ceases
+			break;
+		}
+	}
+
+	if (!single_player) {
+		//the same again for player 2 if player 2 exists
+		player = document.getElementById("n");
+		player_x = +player.getAttribute("row");
+		player_y = +player.getAttribute("column");
+		dir_mod = [0, 0]; //direction modifier to make steps following the gun line of fire
+		flame_available = document.getElementById("n_flame_ammo").innerHTML > 0;
+		flame_targetable = [];
+		if (player.classList.contains("up")) {
+			dir_mod[0] = -1;
+			if (flame_available) {
+				//flamethrower ammo available, add flamethrower covered fields to danger zone
+				flame_targetable.push([+player_x - 1, +player_y]);
+				flame_targetable.push([+player_x - 1, +player_y - 1]);
+				flame_targetable.push([+player_x - 1, +player_y + 1]);
+				flame_targetable.push([+player_x - 2, +player_y]);
+			}
+		} else if (player.classList.contains("down")) {
+			dir_mod[0] = 1;
+			if (flame_available) {
+				//flamethrower ammo available, add flamethrower covered fields to danger zone
+				flame_targetable.push([+player_x + 1, +player_y]);
+				flame_targetable.push([+player_x + 1, +player_y - 1]);
+				flame_targetable.push([+player_x + 1, +player_y + 1]);
+				flame_targetable.push([+player_x + 2, +player_y]);
+			}
+		} else if (player.classList.contains("right")) {
+			dir_mod[1] = 1;
+			if (flame_available) {
+				//flamethrower ammo available, add flamethrower covered fields to danger zone
+				flame_targetable.push([+player_x, +player_y + 1]);
+				flame_targetable.push([+player_x - 1, +player_y + 1]);
+				flame_targetable.push([+player_x + 1, +player_y + 1]);
+				flame_targetable.push([+player_x, +player_y + 2]);
+			}
+		} else if (player.classList.contains("left")) {
+			dir_mod[1] = -1;
+			if (flame_available) {
+				//flamethrower ammo available, add flamethrower covered fields to danger zone
+				flame_targetable.push([+player_x, +player_y - 1]);
+				flame_targetable.push([+player_x - 1, +player_y - 1]);
+				flame_targetable.push([+player_x + 1, +player_y - 1]);
+				flame_targetable.push([+player_x, +player_y - 2]);
+			}
+		}
+
+		//if flamethrower ammo is available, add those of the flamethrower-covered fields that are actually places the enemy can go to the returner
+		if (flame_available) {
+			let targeted_cell;
+			for (let i = 0; i < 4; i++) {
+				if (in_bounds(flame_targetable[i][0], flame_targetable[i][1])) {
+					targeted_cell = table.children[flame_targetable[i][0]].children[flame_targetable[i][1]];
+					if (targeted_cell.classList.contains("0") || targeted_cell.classList.contains("e")) {
+						returner.push([flame_targetable[i][0], flame_targetable[i][1]]);
+					}
+				}
+			}
+		}
+
+		let step_coords = [+player_x + dir_mod[0], +player_y + dir_mod[1]];
+		while (in_bounds(step_coords[0], step_coords[1])) {
+			if (table.children[step_coords[0]].children[step_coords[1]].classList.contains["0"]) {
+				returner.push([step_coords[0], step_coords[1]]);
+
+				step_coords[0] = +step_coords[0] + dir_mod[0];
+				step_coords[1] = +step_coords[1] + dir_mod[1];
+			} else {
+				//encountered obstacle, line of fire ceases
+				break;
+			}
+		}
+	}
+
+	let returner_unique = [...new Set(returner)]; //according to https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-a-javascript-array this should remove all duplicates from the line of fire tile list, which will make things easier to handle
+
+	return returner_unique;
+}
+
