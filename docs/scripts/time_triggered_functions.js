@@ -212,7 +212,7 @@ function find_line_of_fire_tiles() {
 
 	let step_coords = [+player_x + dir_mod[0], +player_y + dir_mod[1]];
 	while (in_bounds(step_coords[0], step_coords[1])) {
-		if (table.children[step_coords[0]].children[step_coords[1]].classList.contains["0"]) {
+		if (table.children[step_coords[0]].children[step_coords[1]].classList.contains("0")) {
 			returner.push([step_coords[0], step_coords[1]]);
 
 			step_coords[0] = +step_coords[0] + dir_mod[0];
@@ -284,7 +284,7 @@ function find_line_of_fire_tiles() {
 
 		let step_coords = [+player_x + dir_mod[0], +player_y + dir_mod[1]];
 		while (in_bounds(step_coords[0], step_coords[1])) {
-			if (table.children[step_coords[0]].children[step_coords[1]].classList.contains["0"]) {
+			if (table.children[step_coords[0]].children[step_coords[1]].classList.contains("0")) {
 				returner.push([step_coords[0], step_coords[1]]);
 
 				step_coords[0] = +step_coords[0] + dir_mod[0];
@@ -296,7 +296,13 @@ function find_line_of_fire_tiles() {
 		}
 	}
 
-	let returner_unique = [...new Set(returner)]; //according to https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-a-javascript-array this should remove all duplicates from the line of fire tile list, which will make things easier to handle
+	//remove duplicate coordinates
+	let returner_unique = [];
+	for (let i = 0; i < returner.length; i++) {
+		if (!returner_unique.some(e => (e[0] == returner[i][0] && e[1] == returner[i][1]))) {
+			returner_unique.push(returner[i]);
+		}
+	}
 
 	return returner_unique;
 }
