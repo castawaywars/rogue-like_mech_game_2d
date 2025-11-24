@@ -307,6 +307,11 @@ function find_line_of_fire_tiles() {
 	return returner_unique;
 }
 
+/**
+ * Create a two-dimensional array of the same dimensions as the map with the numbers for pathfinding to the mechs
+ * @param {Array} line_of_fire_tiles Array of tiles that are in the line of fire of the mechs. Leave empty if irrelevant.
+ * @returns Two-dimensional Array with the pathfinding numbers, lower numbers towards the mechs.
+ */
 function pathfinder_map(line_of_fire_tiles) {
 	let table = table_target();
 	let board = [];
