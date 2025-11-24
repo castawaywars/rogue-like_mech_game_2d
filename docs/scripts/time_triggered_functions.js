@@ -307,3 +307,77 @@ function find_line_of_fire_tiles() {
 	return returner_unique;
 }
 
+function pathfinder_map(line_of_fire_tiles) {
+	let table = table_target();
+	let board = [];
+	//prepare board and place some initial values
+	let content;
+	for (let i = 0; i < table.children.length; i++) {
+		board.push([]);
+		for (let j = 0; j < table.children[i].children.length; j++) {
+			content = table.children[i].children[j].classList;
+			if (content.contains("0") || content.contains("e")) {
+				//empty tile or enemy. Set to 0 for now.
+				board[i].push(0);
+			} else if (content.contains("m") || content.contains("n")) {
+				//set the tile to 1 as a starting point for pathfinding
+				board[i].push(1);
+			} else {
+				//some kind of obstacle. Set to x
+				board[i].push("x");
+			}
+		}
+	}
+
+	let found_something = false;
+	let found_something_before = false;
+	let step = 1;
+	let adjacent;
+	do {
+		//set the abort conditions. It's a bit roundabout because I need to keep more than one iteration in view.
+		if (found_something) {
+			found_something_before = true;
+		} else {
+			found_something_before = false;
+		}
+		found_something = false;
+
+		//go through the entire board, look for numbers matching the current step
+		for (let i = 0; i < board.length; i++) {
+			for (let j = 0; j < board[0].length; j++) {
+				if (board[i][j] == step) {
+					//here we have to react.
+					adjacent = adjacent_coords(i, j);
+
+					for (let k = 0; k < 4; k++) {
+						if (in_bounds(adjacent[k][0], adjacent[k][1])) {
+							if (board[adjacent[k][0]][adjacent[k][1]] == 0) {
+								//passable terrain, to be assigned value
+								board[adjacent[k][0]][adjacent[k][1]] = step + 1;
+								found_something = true;
+								if (line_of_fire_tiles.some(e => (e[0] == adjacent[k][0] && e[1] == adjacent[k][1]))) {
+									//line of fire. Avoid if possible, therefore set to higher value
+									board[adjacent[k][0]][adjacent[k][1]] = step + 2;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		step++;
+	} while (found_something || found_something_before);
+
+	return board;
+}
+
+/**
+ * get adjacent coordinates to a given x and y
+ * @param {Number} x 
+ * @param {Number} y 
+ * @returns array of adjacent coordinates
+ */
+function adjacent_coords(x, y) {
+	return [[x, y - 1], [x - 1, y], [x, y + 1], [x + 1, y]];
+}

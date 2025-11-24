@@ -75,6 +75,7 @@
 	<!-- get all the maps, imported as JS scripts because that works reliably, and the maps can be made to have that format -->
 	<script src="./maps/deadly_horde.js"></script>
 	<script src="./maps/fortress.js"></script>
+	<script src="./maps/pathfinding_test_map.js"></script>
 	<script src="./maps/test_map.js"></script>
 	<script src="./maps/test_map2.js"></script>
 
@@ -113,6 +114,9 @@
 							break;
 						case "deadly_horde":
 							build_map(deadly_horde);
+							break;
+						case "pathfinding_test_map":
+							build_map(pathfinding_test_map);
 							break;
 						case "test_map":
 							build_map(test_map);
