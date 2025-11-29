@@ -355,6 +355,70 @@ function find_line_of_fire_tiles() {
 }
 
 /**
+ * Approach mode: Move a single enemy to the optimal tile out of a set of options given the pathfinding map.
+ * @param {Element} enemy_tile Tile of the enemy
+ * @param {Array} option_tiles Coordinates of movement options
+ * @param {Array} pathfinder_map pathfinder map
+ * @returns 
+ */
+function move_to_optimal_tile_approach(enemy_tile, option_tiles, pathfinder_map) {
+	if (option_tiles.length == 0) {
+		return;//no options to move to, abort
+	}
+
+	//find optimal tile;
+	let min;
+	let min_i;
+	for (let i = 0; i < option_tiles.length; i++) {
+		if (i == 0) {
+			min_i = 0;
+			min = pathfinder_map[option_tiles[i][0]][option_tiles[i][1]];
+		} else if (pathfinder_map[option_tiles[i][0]][option_tiles[i][1]] < min) {
+			min_i = i;
+			min = pathfinder_map[option_tiles[i][0]][option_tiles[i][1]]
+		}
+	}
+
+	//check if targeted tile is better than current
+	if (min > pathfinder_map[enemy_tile.getAttribute("row")][enemy_tile.getAttribute("column")]) {
+		return;
+	}
+
+	//do the actual move, logic copied from random_enemy_move, because that worked.
+
+	let the_table = table_target();
+	let target_tile = the_table.children[option_tiles[min_i][0]].children[option_tiles[min_i][1]];
+	if (target_tile.classList.contains(0)) {
+		//empty tile targeted. Move.
+		tile_set_classes_to_zero(enemy_tile);
+		target_tile.classList.remove("0");
+		target_tile.classList.add("e");
+	} else if (target_tile.classList.contains("n") || target_tile.classList.contains("m")) {
+		tile_set_classes_to_zero(enemy_tile); //enemy disappears regardless of result
+
+		//enemy detected.
+		let mech = "";
+		if (target_tile.classList.contains("m")) {
+			mech = "m";
+		} else if (target_tile.classList.contains("n")) {
+			mech = "n";
+		}
+
+		//reduce mech health
+		let mech_health_span = document.getElementById(mech + "_health");
+		mech_health_span.innerHTML--;
+
+		//If mech health =0, kill him and promote enemy into a spawner
+		if (mech_health_span.innerHTML == 0) {
+			tile_set_classes_to_zero(target_tile);
+			target_tile.removeAttribute("id");
+			target_tile.classList.remove("0");
+			target_tile.classList.add("s");
+		}
+	}
+}
+
+/**
  * Create a two-dimensional array of the same dimensions as the map with the numbers for pathfinding to the mechs
  * @param {Array} line_of_fire_tiles Array of tiles that are in the line of fire of the mechs. Leave empty if irrelevant.
  * @returns Two-dimensional Array with the pathfinding numbers, lower numbers towards the mechs.
