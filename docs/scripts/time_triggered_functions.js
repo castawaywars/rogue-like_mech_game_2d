@@ -174,7 +174,7 @@ function determine_aggressiveness() {
 		return;//no mechs, don't waste energy and processing power on trying to find them
 	}
 	if (spawners.length == 0) {
-		reckless_seeking_enemy_move(pathfinder_map([]));
+		seeking_enemy_move(pathfinder_map([]));
 		return;
 	}
 
@@ -185,7 +185,7 @@ function determine_aggressiveness() {
 
 	if (enemies.length > height * width * 0.2) {
 		//this means 20% of the map's tiles are covered by enemies, which is enough to be reckless.
-		reckless_seeking_enemy_move(pathfinder_map([]));
+		seeking_enemy_move(pathfinder_map([]));
 		return;
 	} else if (enemies.length > height * width * 0.05) {
 		//this means that 5%-20% of the map's tiles is enemies, approach.
@@ -358,6 +358,36 @@ function find_line_of_fire_tiles() {
 	}
 
 	return returner_unique;
+}
+
+/**
+ * Command all enemies to approach the nearest mech according to pathfinder map
+ * @param {Array} pathfinder_map pathfinder map with line of fire considered as per determined aggressiveness
+ */
+function seeking_enemy_move(pathfinder_map) {
+	let the_table = table_target();
+	let adjacent;
+	let adjacent_raw;
+	let tile_content;
+	for (let enemy of document.getElementsByClassName("e")) {
+		adjacent = [];
+		adjacent_raw = adjacent_coords(+enemy.getAttribute("row"), +enemy.getAttribute("column"));
+
+		for (let location of adjacent_raw) {
+			if (!in_bounds(location[0], location[1])) {
+				//out of bounds, discard
+				continue;
+			}
+
+			tile_content = the_table.children[location[0]].children[location[1]].classList;
+			if (tile_content.contains("m") || tile_content.contains("n") || tile_content.contains("0")) {
+				//found tile where we can move
+				adjacent.push(location);
+			}
+		}
+
+		move_to_optimal_tile_approach(enemy, adjacent, pathfinder_map);
+	}
 }
 
 /**
