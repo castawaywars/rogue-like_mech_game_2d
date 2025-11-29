@@ -232,10 +232,7 @@
 			time_since_spawn++;
 			if (time_since_move >= move_delay) {
 				//move all enemies
-				let enemies = document.getElementsByClassName("e");
-				for (let enemy of enemies) {
-					random_enemy_move(enemy);
-				}
+				determine_aggressiveness();
 				time_since_move = 0;
 			}
 
