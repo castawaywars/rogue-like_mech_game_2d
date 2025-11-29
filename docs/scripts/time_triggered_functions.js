@@ -145,6 +145,53 @@ function random_enemy_move(enemy_tile) {
 		}
 	}
 }
+
+/**
+ * figures out how agressive the enemies should behave, and triggers actions accordingly.
+ */
+function determine_aggressiveness() {
+	//if there are spawners, and enough enemies around, cautiously approach
+	//if there are spawners, and a lot of enemies around, recklessly charge and ignore losses
+	//if there are spawners, and few enemies around, retreat and hope for more spawns
+	//if there are no spawners, there's no point to waiting, full charge
+	//if there are no enemies or no mechs, do nothing, to save processing power
+
+	let spawners = document.getElementsByClassName("s");
+	let enemies = document.getElementsByClassName("e");
+	let m = document.getElementsByClassName("m");
+	let n = document.getElementsByClassName("n");
+
+	if (enemies.length == 0) {
+		return;//no enemies, abort the function to save processing power
+	}
+	if (m.length == 0 && n.length == 0) {
+		return;//no mechs, don't waste energy and processing power on trying to find them
+	}
+	if (spawners.length == 0) {
+		reckless_seeking_enemy_move(pathfinder_map([]));
+		return;
+	}
+
+	//at this point in the function, there are enemies, at least one mech, and spawners available.
+	let the_table = table_target();
+	let height = the_table.children.length;
+	let width = the_table.children[0].children.length;
+
+	if (enemies.length > height * width * 0.2) {
+		//this means 20% of the map's tiles are covered by enemies, which is enough to be reckless.
+		reckless_seeking_enemy_move(pathfinder_map([]));
+		return;
+	} else if (enemies.length > height * width * 0.05) {
+		//this means that 5%-20% of the map's tiles is enemies, approach.
+		seeking_enemy_move(pathfinder_map(find_line_of_fire_tiles()));
+		return;
+	} else {
+		//with less than 5% of the map occupied by enemies, better to be careful and retreat.
+		fleeing_enemy_move(pathfinder_map([]), find_line_of_fire_tiles());
+		return;
+	}
+}
+
 /**
  * finds where the mechs can shoot
  * @returns array of [x,y]-coordinates where mechs can shoot
