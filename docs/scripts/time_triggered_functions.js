@@ -1,5 +1,7 @@
 // ---------- Time-triggered functions ----------
 
+// ---------- spawn functions ----------
+
 /**
  * spawns a new enemy if it can find a suitable space fast enough
  */
@@ -83,6 +85,8 @@ function try_place_enemy(target_row, target_col) {
 	}
 }
 
+// ---------- random enemy movement functions ----------
+
 /**
  * moves an enemy in a random direction
  * if the enemy crashes into a mech, destroy to the mech and promote the enemy to a spawner
@@ -145,6 +149,8 @@ function random_enemy_move(enemy_tile) {
 		}
 	}
 }
+
+// ---------- non-random enemy movement functions ----------
 
 /**
  * figures out how agressive the enemies should behave, and triggers actions accordingly.
