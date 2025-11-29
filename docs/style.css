@@ -12,12 +12,26 @@ td {
 	background-color: grey;
 }
 
-.s,
+.s {
+	padding: 0px;
+}
+
+.s::before {
+	content: url(./img/spawner.png);
+}
+
 .spawner {
 	background-color: black;
 }
 
-.e,
+.e {
+	padding: 0px;
+}
+
+.e::before {
+	content: url(./img/enemy.png);
+}
+
 .enemy {
 	background-color: red;
 }
@@ -32,12 +46,26 @@ td {
 	background-color: yellow;
 }
 
-.f,
+.f {
+	padding: 0px;
+}
+
+.f::before {
+	content: url(./img/flamethrower_ammo.png);
+}
+
 .flamethrower_ammo {
 	background-color: orange;
 }
 
-.h,
+.h {
+	padding: 0px;
+}
+
+.h::before {
+	content: url(./img/repair_package.png);
+}
+
 .health {
 	background-color: white;
 }
