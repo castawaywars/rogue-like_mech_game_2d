@@ -123,8 +123,6 @@ function increase_health(mech) {
 /**
  * shoot the weapons of a mech
  * @param {String} mech 
- * 
- * //TODO: handle shooting flamethrower
  */
 function shoot(mech) {
 	if (document.getElementById(mech + "_gun_ammo").innerHTML == 0) {
