@@ -417,7 +417,7 @@ function fleeing_enemy_move(pathfinder_map, line_of_fire_tiles) {
 			//if a mech is adjacent, pounce
 			if (tile_content.contains("m") || tile_content.contains("n")) {
 				let target_tile = the_table.children[location[0]].children[location[1]];
-				tile_set_classes_to_zero(enemy_tile); //enemy disappears regardless of result
+				tile_set_classes_to_zero(enemy); //enemy disappears regardless of result
 
 				let mech = "";
 				if (target_tile.classList.contains("m")) {
