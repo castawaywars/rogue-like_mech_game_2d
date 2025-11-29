@@ -391,6 +391,93 @@ function seeking_enemy_move(pathfinder_map) {
 }
 
 /**
+ * Commands all enemies to retreat from the mechs while avoiding line of fire
+ * @param {Array} pathfinder_map 
+ * @param {Array} line_of_fire_tiles 
+ */
+function fleeing_enemy_move(pathfinder_map, line_of_fire_tiles) {
+	let the_table = table_target();
+	let adjacent;
+	let adjacent_raw;
+	let tile_content;
+	let pounce = false;
+	for (let enemy of document.getElementsByClassName("e")) {
+		pounce = false;
+		adjacent = [];
+		adjacent_raw = adjacent_coords(+enemy.getAttribute("row"), +enemy.getAttribute("column"));
+
+		for (let location of adjacent_raw) {
+			if (!in_bounds(location[0], location[1])) {
+				//out of bounds, discard
+				continue;
+			}
+
+			tile_content = the_table.children[location[0]].children[location[1]].classList;
+
+			//if a mech is adjacent, pounce
+			if (tile_content.contains("m") || tile_content.contains("n")) {
+				let target_tile = the_table.children[location[0]].children[location[1]];
+				tile_set_classes_to_zero(enemy_tile); //enemy disappears regardless of result
+
+				let mech = "";
+				if (target_tile.classList.contains("m")) {
+					mech = "m";
+				} else if (target_tile.classList.contains("n")) {
+					mech = "n";
+				}
+
+				//reduce mech health
+				let mech_health_span = document.getElementById(mech + "_health");
+				mech_health_span.innerHTML--;
+
+				//If mech health =0, kill him and promote enemy into a spawner
+				if (mech_health_span.innerHTML == 0) {
+					tile_set_classes_to_zero(target_tile);
+					target_tile.removeAttribute("id");
+					target_tile.classList.remove("0");
+					target_tile.classList.add("s");
+				}
+
+				pounce = true;
+
+				break;
+			} else if (tile_content.contains("0")) {
+				//a tile to which we can move, if not in line of fire
+				if (line_of_fire_tiles.some(e => (e[0] == location[0] && e[1] == location[1]))) {
+					continue;
+				} else {
+					adjacent.push(location);
+				}
+			}
+		}
+
+		if (pounce) {
+			continue;
+		}
+
+		//if enemy is in line of fire and no movement option except line of fire exists, allow moving in line of fire
+		if (adjacent.length == 0 && line_of_fire_tiles.some(e => (e[0] == enemy.getAttribute("row") && e[1] == enemy.getAttribute("column")))) {
+			for (let location of adjacent_raw) {
+				if (!in_bounds(location[0], location[1])) {
+					//out of bounds, discard
+					continue;
+				}
+
+				tile_content = the_table.children[location[0]].children[location[1]].classList;
+
+				//if a mech is adjacent, pounce
+				if (tile_content.contains("0")) {
+					//a tile to which we can move
+					adjacent.push(location);
+				}
+			}
+		}
+
+		move_to_optimal_tile_retreat(enemy, adjacent, pathfinder_map);
+	}
+}
+
+/**
  * Approach mode: Move a single enemy to the optimal tile out of a set of options given the pathfinding map.
  * @param {Element} enemy_tile Tile of the enemy
  * @param {Array} option_tiles Coordinates of movement options
