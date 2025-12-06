@@ -73,6 +73,8 @@
 	</table>
 
 	<!-- get all the maps, imported as JS scripts because that works reliably, and the maps can be made to have that format -->
+	<script src="./maps/bridgehead.js"></script>
+	<script src="./maps/city_search.js"></script>
 	<script src="./maps/deadly_horde.js"></script>
 	<script src="./maps/fortress.js"></script>
 	<script src="./maps/pathfinding_test_map.js"></script>
@@ -109,11 +111,17 @@
 				if (param_pieces[0] == "map") {
 					//get the correct file and draw the map
 					switch (param_pieces[1]) {
-						case "fortress":
-							build_map(fortress);
+						case "bridgehead":
+							build_map(bridgehead);
+							break;
+						case "city_search":
+							build_map(city_search);
 							break;
 						case "deadly_horde":
 							build_map(deadly_horde);
+							break;
+						case "fortress":
+							build_map(fortress);
 							break;
 						case "pathfinding_test_map":
 							build_map(pathfinding_test_map);
